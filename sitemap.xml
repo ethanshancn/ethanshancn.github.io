@@ -2,8 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://sgq.me/2016/01/25/php-pthread-memory/</loc>
+    <lastmod>2016-01-25T12:02:51.859Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://sgq.me/2016/01/25/windows-pthread/</loc>
-    <lastmod>2016-01-25T01:42:52.833Z</lastmod>
+    <lastmod>2016-01-25T11:46:27.605Z</lastmod>
   </url>
   
 </urlset>

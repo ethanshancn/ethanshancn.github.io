@@ -30,7 +30,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="/img/ethan.png" class="js-avatar">
+			<img lazy-src="http://ww1.sinaimg.cn/large/6ac54b93gw1f0biwbaah8j20aq0aodh9.jpg" class="js-avatar">
 			
 		</a>
 
@@ -102,7 +102,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/pthreads/" style="font-size: 10px;">pthreads</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a>
+						<a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pthreads/" style="font-size: 20px;">pthreads</a> <a href="/tags/全局变量/" style="font-size: 10px;">全局变量</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a> <a href="/tags/多线程/" style="font-size: 20px;">多线程</a>
 					</div>
 				</section>
 				
@@ -126,7 +126,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="/img/ethan.png" class="js-avatar">
+				<img lazy-src="http://ww1.sinaimg.cn/large/6ac54b93gw1f0biwbaah8j20aq0aodh9.jpg" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -166,11 +166,11 @@
 
       <div class="body-wrap">
   
-    <article id="post-windows-pthread" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-php-pthread-memory" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/01/25/windows-pthread/" class="article-date">
-  	<time datetime="2016-01-25T01:42:52.833Z" itemprop="datePublished">2016-01-25</time>
+      <a href="/2016/01/25/php-pthread-memory/" class="article-date">
+  	<time datetime="2016-01-25T03:09:00.000Z" itemprop="datePublished">2016-01-25</time>
 </a>
     </div>
   
@@ -179,9 +179,81 @@
       <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/25/php-pthread-memory/">PHP中多线程的使用（二）——内存管理方面的注意点</a>
+    </h1>
+  
+
+      </header>
+      
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="PHP_u4E2D_u591A_u7EBF_u7A0B_u7684_u4F7F_u7528_uFF08_u4E00_uFF09"><a href="#PHP_u4E2D_u591A_u7EBF_u7A0B_u7684_u4F7F_u7528_uFF08_u4E00_uFF09" class="headerlink" title="PHP中多线程的使用（一）"></a>PHP中多线程的使用（一）</h1><p>近期为了获得真实的数据以便进行相关数据分析与计算，就开始考虑着从知乎获取一些问答数据，毕竟知乎回答的质量在国内各大社区中还算不错的了。一开始准备C++去开发的，虽然语言只是一种手段，但奈何时间紧、我对C++还不是非常熟悉。没办法，只能够用最熟的PHP顶上去，等以后有空了再迁移到C++吧。<br>在开发一开始就规划着使用多线程以便并发抓取，从实际情况来说这一功能是实现了的，但PHP利用pthreads实现的多线程在共享内存方面有一定的局限性，导致浪费了一点时间，这我以后专门写一下吧。</p>
+        <h1 id="PHP_u4E2D_u591A_u7EBF_u7A0B_u7684_u4F7F_u7528_uFF08_u4E8C_uFF09_u2014_u2014_u5185_u5B58_u7BA1_u7406_u65B9_u9762_u7684_u6CE8_u610F_u70B9"><a href="#PHP_u4E2D_u591A_u7EBF_u7A0B_u7684_u4F7F_u7528_uFF08_u4E8C_uFF09_u2014_u2014_u5185_u5B58_u7BA1_u7406_u65B9_u9762_u7684_u6CE8_u610F_u70B9" class="headerlink" title="PHP中多线程的使用（二）——内存管理方面的注意点"></a>PHP中多线程的使用（二）——内存管理方面的注意点</h1><p>在之前用C/C++开发软件的过程中，可以用线程来共享内存并实现大并发。所以我开发知乎的爬虫系统的时候很自然的就会想到使用共享内存来实现全局的队列，以防止重复爬取某一用户的相关信息。</p>
+<p>但问题就出在这共享内存上。出于php中多线程安全方面的考虑，pthreads在启用多线程时默认是没有开启共享内存的。也就是说如果如下面这般是没有任何数据输出的。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pthreads/">pthreads</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/全局变量/">全局变量</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存管理/">内存管理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/01/25/php-pthread-memory/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-windows-pthread" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/25/windows-pthread/" class="article-date">
+  	<time datetime="2016-01-25T01:48:00.000Z" itemprop="datePublished">2016-01-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/25/windows-pthread/">PHP中多线程的使用（一）——pthreads的安装与调试</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="PHP_u4E2D_u591A_u7EBF_u7A0B_u7684_u4F7F_u7528_uFF08_u4E00_uFF09_u2014_u2014pthreads_u7684_u5B89_u88C5_u4E0E_u8C03_u8BD5"><a href="#PHP_u4E2D_u591A_u7EBF_u7A0B_u7684_u4F7F_u7528_uFF08_u4E00_uFF09_u2014_u2014pthreads_u7684_u5B89_u88C5_u4E0E_u8C03_u8BD5" class="headerlink" title="PHP中多线程的使用（一）——pthreads的安装与调试"></a>PHP中多线程的使用（一）——pthreads的安装与调试</h1><p>近期为了获得真实的数据以便进行相关数据分析与计算，就开始考虑着从知乎获取一些问答数据，毕竟知乎回答的质量在国内各大社区中还算不错的了。一开始准备C++去开发的，虽然语言只是一种手段，但奈何时间紧、我对C++还不是非常熟悉。没办法，只能够用最熟的PHP顶上去，等以后有空了再迁移到C++吧。<br>在开发一开始就规划着使用多线程以便并发抓取，从实际情况来说这一功能是实现了的，但PHP利用pthreads实现的多线程在共享内存方面出于安全性的考虑，默认是没有开启共享内存的。这让我浪费了一点时间去解决问题，这我以后专门写一下吧。</p>
 <p>这里主要完成windows平台中pthreads的安装与测试，因为通过我自己的测试，网上其他的好多文章都没办法成功呢，故专门写一篇。</p>
 <p>关于Linux下面的扩展可以参考<a href="http://zyan.cc/pthreads/">PHP真正多线程的使用</a>这篇文章,当然我以后也会在迁移的时候写一下。<br>
       
@@ -246,7 +318,7 @@
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
-		open_in_new: true
+		open_in_new: false
 	}
 </script>
 <script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
