@@ -53,11 +53,6 @@
 						</div>
 						
 						
-						<div class="icon-wrap icon-me hide" data-idx="3">
-							<div class="user"></div>
-							<div class="shoulder"></div>
-						</div>
-						
 					</div>
 					
 				</div>
@@ -67,8 +62,6 @@
 						<li>菜单</li>
 						<li>标签</li>
 						
-						
-						<li>关于我</li>
 						
 					</ul>
 				</div>
@@ -85,6 +78,8 @@
 				        
 							<li><a href="/archives">所有文章</a></li>
 				        
+							<li><a href="/tags/随笔">随笔</a></li>
+				        
 						</ul>
 					</nav>
 					<nav class="header-nav">
@@ -94,7 +89,7 @@
 					        
 								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/ethan_shan" title="zhihu">zhihu</a>
 					        
-								<a class="mail" target="_blank" href="/ethanshan@foxmail.com" title="mail">mail</a>
+								<a class="mail" target="_blank" href="mailto:ethanshan@foxmail.com" title="mail">mail</a>
 					        
 								<a class="facebook" target="_blank" href="https://www.facebook.com/silams.shan" title="facebook">facebook</a>
 					        
@@ -114,12 +109,6 @@
 				
 				
 
-				
-				
-				<section class="switch-part switch-part3">
-				
-					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
-				</section>
 				
 			</div>
 		</div>
@@ -151,6 +140,8 @@
 		        
 					<li><a href="/archives">所有文章</a></li>
 		        
+					<li><a href="/tags/随笔">随笔</a></li>
+		        
 		        <div class="clearfix"></div>
 				</ul>
 			</nav>
@@ -161,7 +152,7 @@
 			        
 						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/ethan_shan" title="zhihu">zhihu</a>
 			        
-						<a class="mail" target="_blank" href="/ethanshan@foxmail.com" title="mail">mail</a>
+						<a class="mail" target="_blank" href="mailto:ethanshan@foxmail.com" title="mail">mail</a>
 			        
 						<a class="facebook" target="_blank" href="https://www.facebook.com/silams.shan" title="facebook">facebook</a>
 			        
@@ -178,8 +169,8 @@
     <article id="post-windows-pthread" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/01/22/windows-pthread/" class="article-date">
-  	<time datetime="2016-01-22T07:14:13.693Z" itemprop="datePublished">2016-01-22</time>
+      <a href="/2016/01/25/windows-pthread/" class="article-date">
+  	<time datetime="2016-01-25T01:34:01.527Z" itemprop="datePublished">2016-01-25</time>
 </a>
     </div>
   
@@ -190,7 +181,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>tag:php,多线程，pthreads</p>
+<h1 id="PHP_u4E2D_u591A_u7EBF_u7A0B_u7684_u4F7F_u7528_uFF08_u4E00_uFF09"><a href="#PHP_u4E2D_u591A_u7EBF_u7A0B_u7684_u4F7F_u7528_uFF08_u4E00_uFF09" class="headerlink" title="PHP中多线程的使用（一）"></a>PHP中多线程的使用（一）</h1><p>近期为了获得真实的数据以便进行相关数据分析与计算，就开始考虑着从知乎获取一些问答数据，毕竟知乎回答的质量在国内各大社区中还算不错的了。一开始准备C++去开发的，虽然语言只是一种手段，但奈何时间紧、我对C++还不是非常熟悉。没办法，只能够用最熟的PHP顶上去，等以后有空了再迁移到C++吧。<br>在开发一开始就规划着使用多线程以便并发抓取，从实际情况来说这一功能是实现了的，但PHP利用pthreads实现的多线程在共享内存方面有一定的局限性，导致浪费了一点时间，这我以后专门写一下吧。</p>
+<p>这里主要完成windows平台中pthreads的安装与测试，因为通过我自己的测试，网上其他的好多文章都没办法成功呢，故专门写一篇。</p>
+<p>关于Linux下面的扩展可以参考<a href="http://zyan.cc/pthreads/">PHP真正多线程的使用</a>这篇文章,当然我以后也会在迁移的时候写一下。<br>
       
     </div>
     
@@ -200,66 +194,9 @@
       
 
       
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/22/hello-world/" class="article-date">
-  	<time datetime="2016-01-22T02:52:19.516Z" itemprop="datePublished">2016-01-22</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/22/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start"><a href="#Quick_Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create_a_new_post"><a href="#Create_a_new_post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server"><a href="#Run_server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files"><a href="#Generate_static_files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites"><a href="#Deploy_to_remote_sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
+        <p class="article-more-link">
+          <a  href="/2016/01/25/windows-pthread/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
