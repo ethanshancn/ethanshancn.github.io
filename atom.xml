@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sgq.me/"/>
-  <updated>2016-01-26T16:53:46.110Z</updated>
+  <updated>2016-01-26T16:53:46.111Z</updated>
   <id>http://sgq.me/</id>
   
   <author>
@@ -13,27 +13,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title><![CDATA[PHP中CURL使用HTTPS协议相关处理]]></title>
-    <link href="http://sgq.me/2016/01/26/php-curl-https/"/>
-    <id>http://sgq.me/2016/01/26/php-curl-https/</id>
-    <published>2016-01-26T12:21:00.000Z</published>
-    <updated>2016-01-26T16:53:46.110Z</updated>
-    <content type="html"><![CDATA[<p>最近使用到HTTPS协议下的CURL，鉴于现在网上的信息都比较杂乱，没有比较全面合适的信息，故此进行相关的整理与说明。而具体HTTP和HTTPS在协议方面有哪些不同，我会在另外一篇文章里面进行大概的说明。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>最近使用到HTTPS协议下的CURL，鉴于现在网上的信息都比较杂乱，没有比较全面合适的信息，故此进行相关的整理与说明。而具体HTTP和HTTPS在协议方面有哪些不同，我会在另外一篇文章里面进行大概的说明。</p>
-]]>
-    </summary>
-    
-      <category term="curl" scheme="http://sgq.me/tags/curl/"/>
-    
-      <category term="https" scheme="http://sgq.me/tags/https/"/>
-    
-      <category term="php" scheme="http://sgq.me/tags/php/"/>
-    
-  </entry>
   
   <entry>
     <title><![CDATA[PHP中多线程的使用（二）——内存管理方面的注意点]]></title>
