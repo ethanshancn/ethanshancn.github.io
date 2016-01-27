@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/6ac54b93gw1f0e9ccj33mj20gk0f6why.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/6ac54b93gw1f0e9cy3gmej20fl0i0q4z.jpg">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/6ac54b93gw1f0e9dstupmj20qi0et76v.jpg">
-<meta property="og:updated_time" content="2016-01-27T11:18:02.000Z">
+<meta property="og:updated_time" content="2016-01-27T11:33:09.782Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP中CURL使用HTTPS协议相关处理">
 <meta name="twitter:description" content="最近使用到HTTPS协议下的CURL，鉴于现在网上的信息都比较杂乱，没有比较全面合适的信息，故此进行相关的整理与说明。而具体HTTP和HTTPS在协议方面有哪些不同，我会在另外一篇文章里面进行大概的说明。
@@ -217,7 +217,7 @@
 <p>我们都比较熟悉CURL中HTTP协议的获取，当遇到HTTPS时，在初始化的设置方面就稍显复杂了。我们首先从HTTP的初始化说起。</p>
 <p>在PHP的CURL中，使用HTTP协议时可以如下进行初始化,具体信息可以看<a href="http://php.net/manual/zh/book.curl.php" target="_blank" rel="external">手册</a></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line"><span class="comment">// 创建一个新cURL资源</span></span><br><span class="line"><span class="variable">$ch</span> = curl_init();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置URL和相应的选项</span></span><br><span class="line"><span class="variable">$options</span> = <span class="keyword">array</span>(CURLOPT_URL =&gt; <span class="string">'http://www.example.com/'</span>,</span><br><span class="line">                 CURLOPT_HEADER =&gt; <span class="keyword">false</span></span><br><span class="line">                );</span><br><span class="line"></span><br><span class="line">curl_setopt_array(<span class="variable">$ch</span>, <span class="variable">$options</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 抓取URL并把它传递给浏览器</span></span><br><span class="line">curl_exec(<span class="variable">$ch</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 关闭cURL资源，并且释放系统资源</span></span><br><span class="line">curl_close(<span class="variable">$ch</span>);</span><br><span class="line"><span class="preprocessor">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>但是在使用HTTPS协议时，我们有一个准备工作首先要进行操作。</p>
+<p>但是在使用HTTPS协议时，我们有一个准备工作首先要进行操作。<br><a id="more"></a></p>
 <p>我们先要导出网站的SSL证书以便处理加密操作，在FireFox中可按照如下步骤进行</p>
 <ol>
 <li>进入证书查看</li>
