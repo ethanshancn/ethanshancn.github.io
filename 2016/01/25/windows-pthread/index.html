@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Ethan的博客">
 <meta property="og:description" content="近期为了获得真实的数据以便进行相关数据分析与计算，就开始考虑着从知乎获取一些问答数据，毕竟知乎回答的质量在国内各大社区中还算不错的了。一开始准备C++去开发的，虽然语言只是一种手段，但奈何时间紧、我对C++还不是非常熟悉。没办法，只能够用最熟的PHP顶上去，等以后有空了再迁移到C++吧。在开发一开始就规划着使用多线程以便并发抓取，从实际情况来说这一功能是实现了的，但PHP利用pthreads实现的">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/6ac54b93gw1f0awwxeds4j20gv0klq6p.jpg">
-<meta property="og:updated_time" content="2016-01-26T16:53:46.112Z">
+<meta property="og:updated_time" content="2016-01-27T11:22:00.488Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP中多线程的使用（一）——pthreads的安装与调试">
 <meta name="twitter:description" content="近期为了获得真实的数据以便进行相关数据分析与计算，就开始考虑着从知乎获取一些问答数据，毕竟知乎回答的质量在国内各大社区中还算不错的了。一开始准备C++去开发的，虽然语言只是一种手段，但奈何时间紧、我对C++还不是非常熟悉。没办法，只能够用最熟的PHP顶上去，等以后有空了再迁移到C++吧。在开发一开始就规划着使用多线程以便并发抓取，从实际情况来说这一功能是实现了的，但PHP利用pthreads实现的">
@@ -104,7 +104,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pthreads/" style="font-size: 20px;">pthreads</a> <a href="/tags/全局变量/" style="font-size: 10px;">全局变量</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a> <a href="/tags/多线程/" style="font-size: 20px;">多线程</a>
+						<a href="/tags/curl/" style="font-size: 10px;">curl</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pthreads/" style="font-size: 15px;">pthreads</a> <a href="/tags/全局变量/" style="font-size: 10px;">全局变量</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a> <a href="/tags/多线程/" style="font-size: 15px;">多线程</a>
 					</div>
 				</section>
 				
@@ -218,7 +218,7 @@
 <p>pthreadVC2.dll 需要放置到如下目录中：</p>
 <ul>
 <li>php.exe 同等级的目录中</li>
-<li>apache.exe同等级的目录中</li>
+<li>httpd.exe同等级的目录中</li>
 </ul>
 <p>php_pthreads.dll需要放置到php的扩展目录中，一般在 bin\php\ext 文件夹下面</p>
 <p>同时需要在 apache 以及 php 两个目录下的php.ini文件中增加 <code>extension=php_pthreads.dll</code> 扩展(针对wamp而言)</p>

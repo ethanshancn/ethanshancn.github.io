@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://sgq.me/"/>
-  <updated>2016-01-26T16:53:46.111Z</updated>
+  <updated>2016-01-27T11:18:02.000Z</updated>
   <id>http://sgq.me/</id>
   
   <author>
@@ -13,6 +13,47 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[PHP中CURL使用HTTPS协议相关处理]]></title>
+    <link href="http://sgq.me/2016/01/26/php-curl-https/"/>
+    <id>http://sgq.me/2016/01/26/php-curl-https/</id>
+    <published>2016-01-26T12:21:00.000Z</published>
+    <updated>2016-01-27T11:18:02.000Z</updated>
+    <content type="html"><![CDATA[<p>最近使用到HTTPS协议下的CURL，鉴于现在网上的信息都比较杂乱，没有比较全面合适的信息，故此进行相关的整理与说明。而具体HTTP和HTTPS在协议方面有哪些不同，我会在另外一篇文章里面进行大概的说明。</p>
+<p>我们都比较熟悉CURL中HTTP协议的获取，当遇到HTTPS时，在初始化的设置方面就稍显复杂了。我们首先从HTTP的初始化说起。</p>
+<p>在PHP的CURL中，使用HTTP协议时可以如下进行初始化,具体信息可以看<a href="http://php.net/manual/zh/book.curl.php" target="_blank" rel="external">手册</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line"><span class="comment">// 创建一个新cURL资源</span></span><br><span class="line"><span class="variable">$ch</span> = curl_init();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置URL和相应的选项</span></span><br><span class="line"><span class="variable">$options</span> = <span class="keyword">array</span>(CURLOPT_URL =&gt; <span class="string">'http://www.example.com/'</span>,</span><br><span class="line">                 CURLOPT_HEADER =&gt; <span class="keyword">false</span></span><br><span class="line">                );</span><br><span class="line"></span><br><span class="line">curl_setopt_array(<span class="variable">$ch</span>, <span class="variable">$options</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 抓取URL并把它传递给浏览器</span></span><br><span class="line">curl_exec(<span class="variable">$ch</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 关闭cURL资源，并且释放系统资源</span></span><br><span class="line">curl_close(<span class="variable">$ch</span>);</span><br><span class="line"><span class="preprocessor">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>但是在使用HTTPS协议时，我们有一个准备工作首先要进行操作。</p>
+<p>我们先要导出网站的SSL证书以便处理加密操作，在FireFox中可按照如下步骤进行</p>
+<ol>
+<li>进入证书查看</li>
+</ol>
+<p><img src="http://ww1.sinaimg.cn/large/6ac54b93gw1f0e9a04mmpj20bb05bt97.jpg" alt="证书查看1"></p>
+<p><img src="http://ww4.sinaimg.cn/large/6ac54b93gw1f0e9anijn8j20bl06c0tc.jpg" alt="证书查看2"></p>
+<ol>
+<li>选择需要导出的证书项</li>
+</ol>
+<p><img src="http://ww4.sinaimg.cn/large/6ac54b93gw1f0e9ccj33mj20gk0f6why.jpg" alt="选择需要导出的证书1"></p>
+<p><img src="http://ww1.sinaimg.cn/large/6ac54b93gw1f0e9cy3gmej20fl0i0q4z.jpg" alt="选择需要倒数的证书2"></p>
+<ol>
+<li>选择导出的类型并进行存储</li>
+</ol>
+<p><img src="http://ww3.sinaimg.cn/large/6ac54b93gw1f0e9dstupmj20qi0et76v.jpg" alt="选择证书类型"></p>
+<p>在导出完证书后，我们在curl_setopt_array的参数中只要设置该证书的文件地址就可以使用了，如果这个站点需要存储登录态的话还要设置cookie的文件地址，具体信息可查看如下代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//详细文件地址</span></span><br><span class="line"><span class="variable">$caDir</span> = <span class="string">'....../GeoTrustGlobalCA.crt'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//存储cookie信息的文件地址</span></span><br><span class="line"><span class="variable">$cookieDir</span> = <span class="string">'......'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//URL地址</span></span><br><span class="line"><span class="variable">$url</span> = <span class="string">'https://www.zhihu.com/......'</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$defaultOpt</span> = <span class="keyword">array</span>(</span><br><span class="line">	CURLOPT_RETURNTRANSFER =&gt; <span class="keyword">true</span>,     <span class="comment">// return web page</span></span><br><span class="line">	CURLOPT_HEADER         =&gt; <span class="keyword">false</span>,    <span class="comment">// don't return headers</span></span><br><span class="line">	CURLOPT_FOLLOWLOCATION =&gt; <span class="keyword">true</span>,     <span class="comment">// follow redirects</span></span><br><span class="line">	CURLOPT_ENCODING       =&gt; <span class="string">""</span>,       <span class="comment">// handle all encodings</span></span><br><span class="line">	CURLOPT_USERAGENT      =&gt; <span class="string">"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.80 Safari/537.36"</span>,</span><br><span class="line">	CURLOPT_AUTOREFERER    =&gt; <span class="keyword">true</span>,     <span class="comment">// set referer on redirect</span></span><br><span class="line">	CURLOPT_CONNECTTIMEOUT =&gt; <span class="number">120</span>,      <span class="comment">// timeout on connect</span></span><br><span class="line">	CURLOPT_TIMEOUT        =&gt; <span class="number">120</span>,      <span class="comment">// timeout on response</span></span><br><span class="line">	CURLOPT_MAXREDIRS      =&gt; <span class="number">10</span>,       <span class="comment">// stop after 10 redirects</span></span><br><span class="line">	CURLOPT_SSL_VERIFYPEER =&gt; <span class="keyword">true</span>,     <span class="comment">// enabled SSL Cert checks</span></span><br><span class="line">	CURLOPT_SSL_VERIFYHOST =&gt; <span class="number">2</span>,</span><br><span class="line">	CURLOPT_CAINFO         =&gt; <span class="variable">$caDir</span>,</span><br><span class="line">	CURLOPT_COOKIEFILE     =&gt; <span class="variable">$cookieDir</span>,</span><br><span class="line">	CURLOPT_COOKIEJAR      =&gt; <span class="variable">$cookieDir</span>,</span><br><span class="line">	CURLOPT_URL			   =&gt; <span class="variable">$url</span>,</span><br><span class="line">	CURLOPT_HTTPGET		   =&gt; <span class="keyword">true</span>		<span class="comment">//method is GET</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="variable">$handle</span> = curl_init();</span><br><span class="line"></span><br><span class="line">curl_setopt_array(<span class="variable">$handle</span>,<span class="variable">$arrOpt</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$content</span> = curl_exec(<span class="variable">$handle</span>);</span><br><span class="line"><span class="variable">$err</span>     = curl_errno(<span class="variable">$handle</span>);</span><br><span class="line"><span class="variable">$errmsg</span>  = curl_error(<span class="variable">$handle</span>);</span><br><span class="line"><span class="variable">$header</span>  = curl_getinfo(<span class="variable">$handle</span>);</span><br><span class="line"></span><br><span class="line">curl_close(<span class="variable">$handle</span>);</span><br><span class="line"></span><br><span class="line">printf(<span class="string">"Content is %s"</span>, <span class="variable">$content</span>);</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">?&gt;</span></span><br></pre></td></tr></table></figure>]]></content>
+    <summary type="html">
+    <![CDATA[<p>最近使用到HTTPS协议下的CURL，鉴于现在网上的信息都比较杂乱，没有比较全面合适的信息，故此进行相关的整理与说明。而具体HTTP和HTTPS在协议方面有哪些不同，我会在另外一篇文章里面进行大概的说明。</p>
+<p>我们都比较熟悉CURL中HTTP协议的获取，当遇到HT]]>
+    </summary>
+    
+      <category term="curl" scheme="http://sgq.me/tags/curl/"/>
+    
+      <category term="https" scheme="http://sgq.me/tags/https/"/>
+    
+      <category term="php" scheme="http://sgq.me/tags/php/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[PHP中多线程的使用（二）——内存管理方面的注意点]]></title>
@@ -50,7 +91,7 @@
     <link href="http://sgq.me/2016/01/25/windows-pthread/"/>
     <id>http://sgq.me/2016/01/25/windows-pthread/</id>
     <published>2016-01-25T01:48:00.000Z</published>
-    <updated>2016-01-26T16:53:46.112Z</updated>
+    <updated>2016-01-27T11:22:00.488Z</updated>
     <content type="html"><![CDATA[<p>近期为了获得真实的数据以便进行相关数据分析与计算，就开始考虑着从知乎获取一些问答数据，毕竟知乎回答的质量在国内各大社区中还算不错的了。一开始准备C++去开发的，虽然语言只是一种手段，但奈何时间紧、我对C++还不是非常熟悉。没办法，只能够用最熟的PHP顶上去，等以后有空了再迁移到C++吧。<br>在开发一开始就规划着使用多线程以便并发抓取，从实际情况来说这一功能是实现了的，但PHP利用pthreads实现的多线程在共享内存方面出于安全性的考虑，默认是没有开启共享内存的。这让我浪费了一点时间去解决问题，这我以后专门写一下吧。</p>
 <p>这里主要完成windows平台中pthreads的安装与测试，因为通过我自己的测试，网上其他的好多文章都没办法成功呢，故专门写一篇。</p>
 <p>关于Linux下面的扩展可以参考<a href="http://zyan.cc/pthreads/" target="_blank" rel="external">PHP真正多线程的使用</a>这篇文章,当然我以后也会在迁移的时候写一下。<br><a id="more"></a></p>
@@ -66,7 +107,7 @@
 <p>pthreadVC2.dll 需要放置到如下目录中：</p>
 <ul>
 <li>php.exe 同等级的目录中</li>
-<li>apache.exe同等级的目录中</li>
+<li>httpd.exe同等级的目录中</li>
 </ul>
 <p>php_pthreads.dll需要放置到php的扩展目录中，一般在 bin\php\ext 文件夹下面</p>
 <p>同时需要在 apache 以及 php 两个目录下的php.ini文件中增加 <code>extension=php_pthreads.dll</code> 扩展(针对wamp而言)</p>

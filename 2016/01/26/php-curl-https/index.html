@@ -4,17 +4,29 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Ethan的博客</title>
+  <title>PHP中CURL使用HTTPS协议相关处理 | Ethan的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Ethan的博客">
-<meta property="og:url" content="http://sgq.me/index.html">
+  <meta name="description" content="最近使用到HTTPS协议下的CURL，鉴于现在网上的信息都比较杂乱，没有比较全面合适的信息，故此进行相关的整理与说明。而具体HTTP和HTTPS在协议方面有哪些不同，我会在另外一篇文章里面进行大概的说明。
+我们都比较熟悉CURL中HTTP协议的获取，当遇到HTTPS时，在初始化的设置方面就稍显复杂了。我们首先从HTTP的初始化说起。
+在PHP的CURL中，使用HTTP协议时可以如下进行初始化,具体">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP中CURL使用HTTPS协议相关处理">
+<meta property="og:url" content="http://sgq.me/2016/01/26/php-curl-https/index.html">
 <meta property="og:site_name" content="Ethan的博客">
-<meta property="og:description">
+<meta property="og:description" content="最近使用到HTTPS协议下的CURL，鉴于现在网上的信息都比较杂乱，没有比较全面合适的信息，故此进行相关的整理与说明。而具体HTTP和HTTPS在协议方面有哪些不同，我会在另外一篇文章里面进行大概的说明。
+我们都比较熟悉CURL中HTTP协议的获取，当遇到HTTPS时，在初始化的设置方面就稍显复杂了。我们首先从HTTP的初始化说起。
+在PHP的CURL中，使用HTTP协议时可以如下进行初始化,具体">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/6ac54b93gw1f0e9a04mmpj20bb05bt97.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/6ac54b93gw1f0e9anijn8j20bl06c0tc.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/6ac54b93gw1f0e9ccj33mj20gk0f6why.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/6ac54b93gw1f0e9cy3gmej20fl0i0q4z.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/6ac54b93gw1f0e9dstupmj20qi0et76v.jpg">
+<meta property="og:updated_time" content="2016-01-27T11:18:02.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ethan的博客">
-<meta name="twitter:description">
+<meta name="twitter:title" content="PHP中CURL使用HTTPS协议相关处理">
+<meta name="twitter:description" content="最近使用到HTTPS协议下的CURL，鉴于现在网上的信息都比较杂乱，没有比较全面合适的信息，故此进行相关的整理与说明。而具体HTTP和HTTPS在协议方面有哪些不同，我会在另外一篇文章里面进行大概的说明。
+我们都比较熟悉CURL中HTTP协议的获取，当遇到HTTPS时，在初始化的设置方面就稍显复杂了。我们首先从HTTP的初始化说起。
+在PHP的CURL中，使用HTTP协议时可以如下进行初始化,具体">
   
     <link rel="alternative" href="/atom.xml" title="Ethan的博客" type="application/atom+xml">
   
@@ -164,9 +176,7 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
-  
-    <article id="post-php-curl-https" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-php-curl-https" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2016/01/26/php-curl-https/" class="article-date">
@@ -182,12 +192,23 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/26/php-curl-https/">PHP中CURL使用HTTPS协议相关处理</a>
+    <h1 class="article-title" itemprop="name">
+      PHP中CURL使用HTTPS协议相关处理
     </h1>
   
 
       </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/curl/">curl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/https/">https</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -217,20 +238,19 @@
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/curl/">curl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/https/">https</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/01/25/php-pthread-memory/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">PHP中多线程的使用（二）——内存管理方面的注意点</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
   
 </article>
 
@@ -239,134 +259,28 @@
 
 
 
-
-
-
-  
-    <article id="post-php-pthread-memory" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/25/php-pthread-memory/" class="article-date">
-  	<time datetime="2016-01-25T03:09:00.000Z" itemprop="datePublished">2016-01-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/25/php-pthread-memory/">PHP中多线程的使用（二）——内存管理方面的注意点</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在之前用C/C++开发软件的过程中，可以用线程来共享内存并实现大并发。所以我开发知乎的爬虫系统的时候很自然的就会想到使用共享内存来实现全局的队列，以防止重复爬取某一用户的相关信息。</p>
-<p>但问题就出在这共享内存上。出于php中多线程安全方面的考虑，pthreads在启用多线程时默认是没有开启共享内存的。也就是说如果如下面这般是没有任何数据输出的。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pthreads/">pthreads</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/全局变量/">全局变量</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存管理/">内存管理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/25/php-pthread-memory/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="php-curl-https" data-title="PHP中CURL使用HTTPS协议相关处理" data-url="http://sgq.me/2016/01/26/php-curl-https/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"sgq"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
 
 
 
-
-
-
-
-
-  
-    <article id="post-windows-pthread" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/25/windows-pthread/" class="article-date">
-  	<time datetime="2016-01-25T01:48:00.000Z" itemprop="datePublished">2016-01-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/25/windows-pthread/">PHP中多线程的使用（一）——pthreads的安装与调试</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>近期为了获得真实的数据以便进行相关数据分析与计算，就开始考虑着从知乎获取一些问答数据，毕竟知乎回答的质量在国内各大社区中还算不错的了。一开始准备C++去开发的，虽然语言只是一种手段，但奈何时间紧、我对C++还不是非常熟悉。没办法，只能够用最熟的PHP顶上去，等以后有空了再迁移到C++吧。<br>在开发一开始就规划着使用多线程以便并发抓取，从实际情况来说这一功能是实现了的，但PHP利用pthreads实现的多线程在共享内存方面出于安全性的考虑，默认是没有开启共享内存的。这让我浪费了一点时间去解决问题，这我以后专门写一下吧。</p>
-<p>这里主要完成windows平台中pthreads的安装与测试，因为通过我自己的测试，网上其他的好多文章都没办法成功呢，故专门写一篇。</p>
-<p>关于Linux下面的扩展可以参考<a href="http://zyan.cc/pthreads/">PHP真正多线程的使用</a>这篇文章,当然我以后也会在迁移的时候写一下。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pthreads/">pthreads</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/25/windows-pthread/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -390,8 +304,8 @@
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
