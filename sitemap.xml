@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://sgq.me/2016/01/25/php-pthread-memory/</loc>
+    <lastmod>2016-01-30T06:02:05.118Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://sgq.me/2016/01/26/php-curl-https/</loc>
     <lastmod>2016-01-27T11:33:09.782Z</lastmod>
   </url>
@@ -9,11 +14,6 @@
   <url>
     <loc>http://sgq.me/2016/01/25/windows-pthread/</loc>
     <lastmod>2016-01-27T11:22:00.488Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://sgq.me/2016/01/25/php-pthread-memory/</loc>
-    <lastmod>2016-01-26T16:53:46.111Z</lastmod>
   </url>
   
 </urlset>
