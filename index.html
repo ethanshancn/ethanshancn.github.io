@@ -194,19 +194,7 @@
       
         <p>在以往我们需要改变URL的参数时，我会通过修改<code>window.location.search</code>来实现。但这必然会导致页面的再次刷新，这不是我们想看到的结果。</p>
 <p>最近我的项目中由于一个基础库的bug(短时间内还没办法去修改(〃＞皿＜))必须通过修改url参数来实现一些功能，需要增加的参数存储在<code>sessionStorage.dataSearch</code>中，具体代码如下:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(location.search.length == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(history.replaceState)</span><br><span class="line">    &#123;</span><br><span class="line">        history.replaceState(<span class="literal">null</span>,<span class="literal">null</span>,sessionStorage.dataSearch);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        location.search = sessionStorage.dataSearch;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>说到这个<code>history.replaceState</code>我们就不得不提<code>history.pushStat</code>和<code>history.replaceState</code>这些API了。</p>
-<p><code>pushState</code>是将指定的URL添加到浏览器历史里，<code>replaceState</code>是将指定的URL替换当前的URL。</p>
-<p>###API的使用<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> state = &#123;</span><br><span class="line">    title: title,</span><br><span class="line">    url: options.url,</span><br><span class="line">    otherkey: othervalue</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">window</span>.history.pushState(state, <span class="built_in">document</span>.title, url);</span><br></pre></td></tr></table></figure></p>
-<p>state对象除了要title和url之外，你也可以添加其他的数据，比如：还想将一些发送ajax的配置给保存起来。<br><code>replaceState</code>和<code>pushState</code>是相似的，这里就不多介绍了。</p>
-<p>###响应浏览器的前进、后退操作<br><code>window</code>对象上提供了<code>onpopstate</code>事件，上面传递的state对象会成为event的子对象，这样就可以拿到存储的title和URL了。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'popstate'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (history.state)&#123;</span><br><span class="line">    <span class="keyword">var</span> state = e.state;</span><br><span class="line">    <span class="comment">//do something(state.url, state.title);</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure></p>
-<p>这样就可以结合ajax和pushState完美的进行无刷新浏览了。</p>
-<p>###一些注意点</p>
-<ul>
-<li>无论是<code>history.pushStat</code>还是<code>history.replaceState</code>，其URL必须是同一域名下的，跨域是万万做不到的。</li>
-<li>state对象虽然可以存储很多自定义的属性，但对于不可序列化的对象则不能存储，如：DOM对象。</li>
-</ul>
-<p>###浏览器兼容性<br>当前主流浏览器基本都已经支持了这一特性，当然，IE需要IE10以上<br><img src="http://ww1.sinaimg.cn/large/6ac54b93gw1f14ftcmfh8j20ip0fggpy.jpg" alt="浏览器兼容性"></p>
-
+<p>说到这个<code>history.replaceState</code>我们就不得不提<code>history.pushStat</code>和<code>history.replaceState</code>这些API了。<br>
       
     </div>
     
@@ -219,6 +207,10 @@
 
       
 
+      
+        <p class="article-more-link">
+          <a  href="/2016/02/19/ajax-history-replacestate/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
@@ -449,31 +441,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>因为这段时间项目要使用一些多线程和Socket技术，并且Socket会作为服务器在后台不间断运行，在综合考虑稳定性和效率性之后，决定用自定义扩展结合libevent库来做会更加适合一些。目前这一扩展还处在起步阶段，现在将这两天做的一些事情挂上来，一是给自己做一个备忘，其次也希望能够给接受小伙伴儿的指点。要想针对PHP开发动态的扩展，首先得看一下Laruence写的这篇博客：<a href="http://www.laruence.com/2009/04/28/719.html/comment-page-1" target="_blank" rel="external">用C/C++扩展你的PHP</a> 关于将扩展静态编译到PHP当中讲得非常的清楚和明白。所以我就写清楚动态的将扩展编译到PHP中就OK了。</p>
+        <p>因为这段时间项目要使用一些多线程和Socket技术，并且Socket会作为服务器在后台不间断运行，在综合考虑稳定性和效率性之后，决定用自定义扩展结合libevent库来做会更加适合一些。目前这一扩展还处在起步阶段，现在将这两天做的一些事情挂上来，一是给自己做一个备忘，其次也希望能够给接受小伙伴儿的指点。要想针对PHP开发动态的扩展，首先得看一下Laruence写的这篇博客：<a href="http://www.laruence.com/2009/04/28/719.html/comment-page-1">用C/C++扩展你的PHP</a> 关于将扩展静态编译到PHP当中讲得非常的清楚和明白。所以我就写清楚动态的将扩展编译到PHP中就OK了。</p>
 <ol>
-<li><p>与编写静态扩展类似，在编译PHP源码之前，我们要建立DEF文件、利用ext_skel来生成对应的扩展骨架并修改config.m4文件中对应的位置。假设测试我们生成的扩展骨架的命名是“myfunctions”，这与Laruence博客中的命名一样。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PHP_ARG_ENABLE(myfunctions,whether toenable myfunctions support,</span><br><span class="line">[--enable-myfunctions Include myfunctions support])</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将生成的“myfunctions”文件夹拷贝到php源码外的任意目录并编译php源码。我的编译过程如下：(中间多指定了一下ini文件的目录，个人喜好)</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./buildconf</span><br><span class="line">./configure--prefix=/usr/<span class="built_in">local</span>/php5--with-config-file-path=/usr/<span class="built_in">local</span>/php5/etc</span><br><span class="line">sudo make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将php源码目录下两个类似php.ini-xxxxxxxx中任意一个的“-xxxxxxxxx”删除并复制到刚刚指定的“/usr/local/php5/etc”目录下。</p>
-</li>
-<li>上面三步就将所有的准备工作做好了，接下来就是进入刚刚拷贝出来的“myfunctions”文件夹中，按照Laruence博客中的方法进行扩展的编写了；</li>
-<li>我们编写好扩展之后，我们进入“myfunctions”根目录，执行如下两条命令来配置我们的扩展包<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/php5/bin/phpize</span><br><span class="line">./configure--with-php-config=/usr/<span class="built_in">local</span>/php5/bin/php-config</span><br></pre></td></tr></table></figure>
+<li>与编写静态扩展类似，在编译PHP源码之前，我们要建立DEF文件、利用ext_skel来生成对应的扩展骨架并修改config.m4文件中对应的位置。假设测试我们生成的扩展骨架的命名是“myfunctions”，这与Laruence博客中的命名一样。<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PHP_ARG_ENABLE(myfunctions,whether toenable myfunctions support,</span><br><span class="line">[--enable-myfunctions Include myfunctions support])</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>最后安装就可以了<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure></p>
-<ol>
-<li><p>此时它会提示你的so文件在哪，类似：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Installing shared extensions:/usr/<span class="built_in">local</span>/php5/lib/php/extensions/no-debug-non-zts-<span class="number">20090626</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>最后我们只需要在先前拷过去的php.ini文件中增加一句：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extension=<span class="string">"/usr/local/php5/lib/php/extensions/no-debug-non-zts-20090626/myfunctions.so"</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>就完成了扩展的一整套简单流程。</p>
-
       
     </div>
     
@@ -486,6 +458,10 @@
 
       
 
+      
+        <p class="article-more-link">
+          <a  href="/2014/10/14/php-dynamic-module/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>

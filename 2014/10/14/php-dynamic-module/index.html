@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://sgq.me/2014/10/14/php-dynamic-module/index.html">
 <meta property="og:site_name" content="Ethan的博客">
 <meta property="og:description" content="因为这段时间项目要使用一些多线程和Socket技术，并且Socket会作为服务器在后台不间断运行，在综合考虑稳定性和效率性之后，决定用自定义扩展结合libevent库来做会更加适合一些。目前这一扩展还处在起步阶段，现在将这两天做的一些事情挂上来，一是给自己做一个备忘，其次也希望能够给接受小伙伴儿的指点。要想针对PHP开发动态的扩展，首先得看一下Laruence写的这篇博客：用C/C++扩展你的PH">
-<meta property="og:updated_time" content="2016-02-19T07:35:31.000Z">
+<meta property="og:updated_time" content="2016-02-19T12:23:02.772Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="开发PHP动态可装载模块">
 <meta name="twitter:description" content="因为这段时间项目要使用一些多线程和Socket技术，并且Socket会作为服务器在后台不间断运行，在综合考虑稳定性和效率性之后，决定用自定义扩展结合libevent库来做会更加适合一些。目前这一扩展还处在起步阶段，现在将这两天做的一些事情挂上来，一是给自己做一个备忘，其次也希望能够给接受小伙伴儿的指点。要想针对PHP开发动态的扩展，首先得看一下Laruence写的这篇博客：用C/C++扩展你的PH">
@@ -204,9 +204,11 @@
       
         <p>因为这段时间项目要使用一些多线程和Socket技术，并且Socket会作为服务器在后台不间断运行，在综合考虑稳定性和效率性之后，决定用自定义扩展结合libevent库来做会更加适合一些。目前这一扩展还处在起步阶段，现在将这两天做的一些事情挂上来，一是给自己做一个备忘，其次也希望能够给接受小伙伴儿的指点。要想针对PHP开发动态的扩展，首先得看一下Laruence写的这篇博客：<a href="http://www.laruence.com/2009/04/28/719.html/comment-page-1" target="_blank" rel="external">用C/C++扩展你的PHP</a> 关于将扩展静态编译到PHP当中讲得非常的清楚和明白。所以我就写清楚动态的将扩展编译到PHP中就OK了。</p>
 <ol>
-<li><p>与编写静态扩展类似，在编译PHP源码之前，我们要建立DEF文件、利用ext_skel来生成对应的扩展骨架并修改config.m4文件中对应的位置。假设测试我们生成的扩展骨架的命名是“myfunctions”，这与Laruence博客中的命名一样。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PHP_ARG_ENABLE(myfunctions,whether toenable myfunctions support,</span><br><span class="line">[--enable-myfunctions Include myfunctions support])</span><br></pre></td></tr></table></figure>
+<li>与编写静态扩展类似，在编译PHP源码之前，我们要建立DEF文件、利用ext_skel来生成对应的扩展骨架并修改config.m4文件中对应的位置。假设测试我们生成的扩展骨架的命名是“myfunctions”，这与Laruence博客中的命名一样。<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PHP_ARG_ENABLE(myfunctions,whether toenable myfunctions support,</span><br><span class="line">[--enable-myfunctions Include myfunctions support])</span><br></pre></td></tr></table></figure>
 </li>
+</ol>
+<a id="more"></a>
+<ol>
 <li><p>将生成的“myfunctions”文件夹拷贝到php源码外的任意目录并编译php源码。我的编译过程如下：(中间多指定了一下ini文件的目录，个人喜好)</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./buildconf</span><br><span class="line">./configure--prefix=/usr/<span class="built_in">local</span>/php5--with-config-file-path=/usr/<span class="built_in">local</span>/php5/etc</span><br><span class="line">sudo make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
 </li>
