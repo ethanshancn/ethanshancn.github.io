@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://sgq.me/2014/10/14/php-dynamic-module/</loc>
+    <lastmod>2016-02-19T07:35:31.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://sgq.me/2016/02/19/ajax-history-replacestate/</loc>
+    <lastmod>2016-02-19T04:41:28.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://sgq.me/2016/01/25/php-pthread-memory/</loc>
     <lastmod>2016-01-30T06:02:05.118Z</lastmod>
   </url>
