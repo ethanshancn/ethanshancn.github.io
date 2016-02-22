@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://sgq.me/2014/12/05/bs-php-ipc-socket/</loc>
+    <lastmod>2016-02-22T03:45:21.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://sgq.me/2014/10/14/php-dynamic-module/</loc>
     <lastmod>2016-02-19T12:23:02.772Z</lastmod>
   </url>

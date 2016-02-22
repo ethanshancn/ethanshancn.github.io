@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>利用多种IPC技术以及多进程技术实现WEB 远程控制底层硬件 | Ethan的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="刚完成毕业答辩，现在将我做了小半年的毕业设计的核心代码放到博客上以便备用。
+我的毕业设计是与另一个同学合作开发的一款家庭远程监控系统。用户能够通过网站页面控制家里一些设备，比如说马上到家之前打开空调、离开家之后检查家门有没有真的关上（针对我这样有强迫症的人来说，这是必须的）等等功能，同时也能够实现监视家里是否有人等。本毕设的核心通信思想就是利用AJAX将数据传递到服务器，服务器通过PIPE、SOC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用多种IPC技术以及多进程技术实现WEB 远程控制底层硬件">
+<meta property="og:url" content="http://sgq.me/2014/12/05/bs-php-ipc-socket/index.html">
+<meta property="og:site_name" content="Ethan的博客">
+<meta property="og:description" content="刚完成毕业答辩，现在将我做了小半年的毕业设计的核心代码放到博客上以便备用。
+我的毕业设计是与另一个同学合作开发的一款家庭远程监控系统。用户能够通过网站页面控制家里一些设备，比如说马上到家之前打开空调、离开家之后检查家门有没有真的关上（针对我这样有强迫症的人来说，这是必须的）等等功能，同时也能够实现监视家里是否有人等。本毕设的核心通信思想就是利用AJAX将数据传递到服务器，服务器通过PIPE、SOC">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006f3GNlgw1f17ys0405oj30dw09tdfy.jpg">
+<meta property="og:updated_time" content="2016-02-22T03:45:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用多种IPC技术以及多进程技术实现WEB 远程控制底层硬件">
+<meta name="twitter:description" content="刚完成毕业答辩，现在将我做了小半年的毕业设计的核心代码放到博客上以便备用。
+我的毕业设计是与另一个同学合作开发的一款家庭远程监控系统。用户能够通过网站页面控制家里一些设备，比如说马上到家之前打开空调、离开家之后检查家门有没有真的关上（针对我这样有强迫症的人来说，这是必须的）等等功能，同时也能够实现监视家里是否有人等。本毕设的核心通信思想就是利用AJAX将数据传递到服务器，服务器通过PIPE、SOC">
+  
+    <link rel="alternative" href="/atom.xml" title="Ethan的博客" type="application/atom+xml">
+  
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://ww1.sinaimg.cn/large/6ac54b93gw1f0biwbaah8j20aq0aodh9.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Ethan</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/tags/随笔">随笔</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/ethanshancn" title="github">github</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/ethan_shan" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:ethanshan@foxmail.com" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/silams.shan" title="facebook">facebook</a>
+					        
+								<a class="twitter" target="_blank" href="https://twitter.com/ethan_shan" title="twitter">twitter</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/ajax/" style="font-size: 15px;">ajax</a> <a href="/tags/curl/" style="font-size: 10px;">curl</a> <a href="/tags/history-pushState/" style="font-size: 10px;">history.pushState</a> <a href="/tags/history-replaceState/" style="font-size: 10px;">history.replaceState</a> <a href="/tags/html5/" style="font-size: 10px;">html5</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/module/" style="font-size: 10px;">module</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/pipe/" style="font-size: 10px;">pipe</a> <a href="/tags/pthreads/" style="font-size: 15px;">pthreads</a> <a href="/tags/socket/" style="font-size: 10px;">socket</a> <a href="/tags/全局变量/" style="font-size: 10px;">全局变量</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a> <a href="/tags/多线程/" style="font-size: 15px;">多线程</a> <a href="/tags/毕设/" style="font-size: 10px;">毕设</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Ethan</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="http://ww1.sinaimg.cn/large/6ac54b93gw1f0biwbaah8j20aq0aodh9.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Ethan</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/tags/随笔">随笔</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/ethanshancn" title="github">github</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/ethan_shan" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:ethanshan@foxmail.com" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/silams.shan" title="facebook">facebook</a>
+			        
+						<a class="twitter" target="_blank" href="https://twitter.com/ethan_shan" title="twitter">twitter</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-bs-php-ipc-socket" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/12/05/bs-php-ipc-socket/" class="article-date">
+  	<time datetime="2014-12-05T12:21:00.000Z" itemprop="datePublished">2014-12-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      利用多种IPC技术以及多进程技术实现WEB 远程控制底层硬件
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ajax/">ajax</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pipe/">pipe</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/socket/">socket</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/毕设/">毕设</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>刚完成毕业答辩，现在将我做了小半年的毕业设计的核心代码放到博客上以便备用。</p>
+<p>我的毕业设计是与另一个同学合作开发的一款家庭远程监控系统。用户能够通过网站页面控制家里一些设备，比如说马上到家之前打开空调、离开家之后检查家门有没有真的关上（针对我这样有强迫症的人来说，这是必须的）等等功能，同时也能够实现监视家里是否有人等。<br>本毕设的核心通信思想就是利用AJAX将数据传递到服务器，服务器通过PIPE、SOCKET技术将发送的命令传递到家庭控制中心（一款小型嵌入式设备），最后家庭控制中心作出相应的操作后返回操作完成确认信号，最终返回到用户界面，其通信流程如下：<br><img src="http://ww3.sinaimg.cn/large/006f3GNlgw1f17ys0405oj30dw09tdfy.jpg" alt="毕设数据结构"><br><a id="more"></a><br>现在把主要的核心代码贴上来：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">&lt;?php</span></span><br><span class="line">error_reporting(E_ALL);</span><br><span class="line">set_time_limit(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">require_once</span><span class="string">'./safeclass/pipe.class.php'</span>;</span><br><span class="line"><span class="comment">// 配置socket的基本变量</span></span><br><span class="line"><span class="variable">$socketServerIp</span>=<span class="string">"0.0.0.0"</span>;</span><br><span class="line"><span class="variable">$socketPort</span>=<span class="number">8086</span>;</span><br><span class="line"><span class="comment">// 建立、绑定、监听socket</span></span><br><span class="line"><span class="variable">$parentSocket</span>=socket_create(AF_INET,SOCK_STREAM,SOL_TCP)ordie(<span class="string">"Could not create socket :"</span>.socket_strerror(socket_last_error()).<span class="string">"\n"</span>);</span><br><span class="line"><span class="variable">$result</span>=socket_bind(<span class="variable">$parentSocket</span>,<span class="variable">$socketServerIp</span>,<span class="variable">$socketPort</span>)ordie(<span class="string">"Could not bind to socket :"</span>.socket_strerror(socket_last_error()).<span class="string">"\n"</span>);</span><br><span class="line"><span class="variable">$result</span>=socket_listen(<span class="variable">$parentSocket</span>,<span class="number">50</span>)ordie(<span class="string">"Could not set up socket listener :"</span>.socket_strerror(socket_last_error()).<span class="string">"\n"</span>);</span><br><span class="line"><span class="comment">// 产生第一子进程</span></span><br><span class="line"><span class="variable">$firstChild</span>=pcntl_fork();</span><br><span class="line">                </span><br><span class="line"><span class="comment">/*</span><br><span class="line"> * 第一子进程使socket脱离php处理机制，实现后台多进程运行</span><br><span class="line"> * 功能：产生并监听子socket</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$firstChild</span>==<span class="number">0</span>)&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">        <span class="comment">// 在接收客户端的请求产生子socket的前提下进行相关的信息处理</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="variable">$childSocket</span>=socket_accept(<span class="variable">$parentSocket</span>))&#123;</span><br><span class="line">            <span class="comment">// 获取客户端的IP并进行格式化</span></span><br><span class="line">            socket_getpeername(<span class="variable">$childSocket</span>,<span class="variable">$strGuestIp</span>);</span><br><span class="line">            <span class="variable">$arrTmpGuestIp</span>=explode(<span class="string">'.'</span>,<span class="variable">$strGuestIp</span>);</span><br><span class="line">            <span class="variable">$strGuestIp</span>=<span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">foreach</span>(<span class="variable">$arrTmpGuestIpas</span><span class="variable">$ket</span>=&gt;<span class="variable">$val</span>)&#123;</span><br><span class="line">                <span class="variable">$val</span>=sprintf(<span class="string">"%03d"</span>,<span class="variable">$val</span>);</span><br><span class="line">                <span class="variable">$strGuestIp</span>.=<span class="variable">$val</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 产生第二子进程</span></span><br><span class="line">            <span class="variable">$secondChild</span>=pcntl_fork();</span><br><span class="line">                            </span><br><span class="line">            <span class="comment">/*</span><br><span class="line">             * 第二子进程是针对每一个客户端在服务器端产生一个守护进程用来进行独立的socket通信</span><br><span class="line">             * 功能：与客户端进行通信</span><br><span class="line">             */</span></span><br><span class="line">            <span class="keyword">if</span>(<span class="variable">$secondChild</span>==<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="comment">// 客户端连接成功，发送确认信息给客户端</span></span><br><span class="line">                <span class="variable">$strOutput</span>=<span class="string">'Successful connection !'</span>;</span><br><span class="line">                socket_write(<span class="variable">$childSocket</span>,<span class="variable">$strOutput</span>,strlen(<span class="variable">$strOutput</span>));</span><br><span class="line">                <span class="keyword">unset</span>(<span class="variable">$strOutput</span>);</span><br><span class="line">                <span class="comment">// 用于使循环自然死亡</span></span><br><span class="line">                <span class="keyword">static</span><span class="variable">$strDeathFlag</span>=<span class="number">1</span>;</span><br><span class="line">                <span class="comment">// 用于缓存接收到的数据</span></span><br><span class="line">                <span class="keyword">static</span><span class="variable">$arrInput</span>=<span class="keyword">array</span>();</span><br><span class="line">                <span class="comment">// 用于标记缓存接收到的次序</span></span><br><span class="line">                <span class="keyword">static</span><span class="variable">$strInputFlag</span>=<span class="number">0</span>;</span><br><span class="line">                <span class="comment">// 用于标记是否已经产生发送进程</span></span><br><span class="line">                <span class="keyword">static</span><span class="variable">$strPipeFlag</span>=<span class="number">0</span>;</span><br><span class="line">                <span class="keyword">while</span>(<span class="variable">$strDeathFlag</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(<span class="variable">$strInput</span>=socket_read(<span class="variable">$childSocket</span>,<span class="number">1024</span>))&#123;</span><br><span class="line">                        <span class="comment">// 收到信号后自然死亡</span></span><br><span class="line">                        <span class="keyword">if</span>(<span class="variable">$strInput</span>==<span class="string">'shutdown'</span>)&#123;</span><br><span class="line">                            <span class="variable">$strDeathFlag</span>=<span class="number">0</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                                        </span><br><span class="line">                        <span class="comment">// 格式化字符串，转化为十进制</span></span><br><span class="line">                        <span class="variable">$arrUnpack</span>=unpack(<span class="string">"C*"</span>,<span class="variable">$strInput</span>);</span><br><span class="line">                        <span class="comment">// 整合数组</span></span><br><span class="line">                        <span class="keyword">if</span>(count(<span class="variable">$arrUnpack</span>)&gt;<span class="number">1</span>)&#123;</span><br><span class="line">                            <span class="variable">$strData</span>=(<span class="variable">$arrUnpack</span>[<span class="number">1</span>]&lt;&lt;<span class="number">8</span>)+<span class="variable">$arrUnpack</span>[<span class="number">2</span>];</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            <span class="variable">$strData</span>=<span class="variable">$arrUnpack</span>[<span class="number">1</span>];</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="comment">// 结束缓存，存入文件中。收到的十六进制数为 0xEEEE，标志结束</span></span><br><span class="line">                        <span class="keyword">if</span>(<span class="variable">$strData</span>==<span class="number">61166</span>&amp;&amp;<span class="variable">$strInputFlag</span>!=<span class="number">0</span>)&#123;</span><br><span class="line">                            <span class="variable">$arrInput</span>[<span class="string">'guestIp'</span>]=<span class="variable">$strGuestIp</span>;</span><br><span class="line">                            <span class="variable">$someContent</span>=<span class="string">'&lt;?php'</span>.<span class="string">"\n"</span>.<span class="string">'$arrInput = '</span>.var_export(<span class="variable">$arrInput</span>,<span class="keyword">true</span>).<span class="string">';'</span>.<span class="string">"\n"</span>.<span class="string">'?&gt;'</span>;</span><br><span class="line">                            <span class="variable">$handle</span> = fopen ( <span class="string">'./houseSafeSituation/'</span> . <span class="variable">$arrInput</span> [<span class="string">'houseId'</span>] . <span class="string">'.txt'</span>, <span class="string">"w+"</span> );</span><br><span class="line">                            fwrite ( <span class="variable">$handle</span>, <span class="variable">$someContent</span> );</span><br><span class="line">                            fclose ( <span class="variable">$handle</span> );</span><br><span class="line">                            <span class="variable">$strInputFlag</span> = <span class="number">0</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                                        </span><br><span class="line">                        <span class="comment">// 测试时使用，发送相关信息给客户端</span></span><br><span class="line">                        <span class="variable">$strOutput</span> = <span class="string">'flag:'</span> . <span class="variable">$strInputFlag</span> . <span class="string">'strData:'</span> . <span class="variable">$strData</span> . <span class="string">'houseId'</span> . <span class="variable">$arrInput</span> [<span class="string">'houseId'</span>];</span><br><span class="line">                        socket_write ( <span class="variable">$childSocket</span>, <span class="variable">$strOutput</span>, strlen ( <span class="variable">$strOutput</span> ) );</span><br><span class="line">                        <span class="variable">$strOutput</span> = <span class="keyword">null</span>;</span><br><span class="line">                                        </span><br><span class="line">                        <span class="comment">/*</span><br><span class="line">                         * 开始缓存数据</span><br><span class="line">                         */</span></span><br><span class="line">                        <span class="keyword">switch</span> (<span class="variable">$strInputFlag</span>) &#123;</span><br><span class="line">                            <span class="comment">// 接收住宅号并存入缓存</span></span><br><span class="line">                            <span class="keyword">case</span> <span class="number">1</span> :</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="comment">// $arrInput ['houseId'] = sprintf ( "%05d", $strData );</span></span><br><span class="line">                                    <span class="variable">$arrInput</span> [<span class="string">'houseId'</span>] = <span class="variable">$strData</span>;</span><br><span class="line">                                    <span class="variable">$strInputFlag</span> = <span class="number">2</span>;</span><br><span class="line">                                    <span class="keyword">break</span>;</span><br><span class="line">                                &#125;</span><br><span class="line">                            <span class="comment">// 接收四个LED灯的情况</span></span><br><span class="line">                            <span class="keyword">case</span> <span class="number">2</span> :</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="comment">// 转换为二进制</span></span><br><span class="line">                                    <span class="variable">$strTmp</span> = <span class="variable">$strData</span>;</span><br><span class="line">                                    <span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">4</span>; <span class="variable">$i</span> ++) &#123;</span><br><span class="line">                                        <span class="variable">$arrInput</span> [<span class="string">'LED'</span> . (<span class="variable">$i</span> + <span class="number">1</span>)] = <span class="variable">$strTmp</span> % <span class="number">2</span>;</span><br><span class="line">                                        <span class="variable">$strTmp</span> = floor ( <span class="variable">$strTmp</span> / <span class="number">2</span> );</span><br><span class="line">                                    &#125;</span><br><span class="line">                                    <span class="variable">$strInputFlag</span> = <span class="number">3</span>;</span><br><span class="line">                                    <span class="keyword">break</span>;</span><br><span class="line">                                &#125;</span><br><span class="line">                            <span class="comment">// 接收温度</span></span><br><span class="line">                            <span class="keyword">case</span> <span class="number">3</span> :</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="variable">$arrInput</span> [<span class="string">'temp'</span>] = sprintf ( <span class="string">"%0.1f"</span>, <span class="variable">$strData</span> / <span class="number">10</span> );</span><br><span class="line">                                    <span class="variable">$strInputFlag</span> = <span class="number">4</span>;</span><br><span class="line">                                    <span class="keyword">break</span>;</span><br><span class="line">                                &#125;</span><br><span class="line">                            <span class="comment">// 接收相对湿度</span></span><br><span class="line">                            <span class="keyword">case</span> <span class="number">4</span> :</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="variable">$arrInput</span> [<span class="string">'hr'</span>] = sprintf ( <span class="string">"%0.1f"</span>, <span class="variable">$strData</span> / <span class="number">10</span> );</span><br><span class="line">                                    <span class="variable">$strInputFlag</span> = <span class="number">5</span>;</span><br><span class="line">                                    <span class="keyword">break</span>;</span><br><span class="line">                                &#125;</span><br><span class="line">                            <span class="comment">// 接收检测红外线是否有人</span></span><br><span class="line">                            <span class="keyword">case</span> <span class="number">5</span> :</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="keyword">if</span> (<span class="variable">$strData</span>) &#123;</span><br><span class="line">                                        <span class="variable">$arrInput</span> [<span class="string">'isAnyPeople'</span>] = <span class="number">1</span>;</span><br><span class="line">                                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                        <span class="variable">$arrInput</span> [<span class="string">'isAnyPeople'</span>] = <span class="number">0</span>;</span><br><span class="line">                                    &#125;</span><br><span class="line">                                    <span class="variable">$strInputFlag</span> = <span class="number">6</span>;</span><br><span class="line">                                    <span class="keyword">break</span>;</span><br><span class="line">                                &#125;</span><br><span class="line">                            <span class="comment">// 接收烟雾报警器情况</span></span><br><span class="line">                            <span class="keyword">case</span> <span class="number">6</span> :</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="keyword">if</span> (<span class="variable">$strData</span> == <span class="number">1</span>) &#123;</span><br><span class="line">                                        <span class="variable">$arrInput</span> [<span class="string">'isfire'</span>] = <span class="number">1</span>;</span><br><span class="line">                                    &#125; <span class="keyword">elseif</span> (<span class="variable">$strData</span> == <span class="number">0</span>) &#123;</span><br><span class="line">                                        <span class="variable">$arrInput</span> [<span class="string">'isfire'</span>] = <span class="number">0</span>;</span><br><span class="line">                                    &#125;</span><br><span class="line">                                    <span class="variable">$strInputFlag</span> = <span class="number">7</span>;</span><br><span class="line">                                    <span class="keyword">break</span>;</span><br><span class="line">                                &#125;</span><br><span class="line">                            <span class="comment">// 接收三个开关的情况</span></span><br><span class="line">                            <span class="keyword">case</span> <span class="number">7</span> :</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="comment">// 转换为二进制</span></span><br><span class="line">                                    <span class="variable">$strTmp</span> = <span class="variable">$strData</span>;</span><br><span class="line">                                    <span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">3</span>; <span class="variable">$i</span> ++) &#123;</span><br><span class="line">                                        <span class="variable">$arrInput</span> [<span class="string">'switch'</span> . (<span class="variable">$i</span> + <span class="number">1</span>)] = <span class="variable">$strTmp</span> % <span class="number">2</span>;</span><br><span class="line">                                        <span class="variable">$strTmp</span> = floor ( <span class="variable">$strTmp</span> / <span class="number">2</span> );</span><br><span class="line">                                    &#125;</span><br><span class="line">                                    <span class="variable">$strInputFlag</span> = <span class="number">8</span>;</span><br><span class="line">                                    <span class="keyword">break</span>;</span><br><span class="line">                                &#125;</span><br><span class="line">                            <span class="keyword">default</span> :</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="variable">$strInputFlag</span> = <span class="number">1</span>;</span><br><span class="line">                                &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="comment">// 开始缓存，收到的十六进制数为0xFFFF，标识开始</span></span><br><span class="line">                        <span class="keyword">if</span> (<span class="variable">$strData</span> == <span class="number">65535</span>) &#123;</span><br><span class="line">                            <span class="variable">$strInputFlag</span> = <span class="number">1</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="comment">// 条件满足时用来发送从管道中IPC过来的信息</span></span><br><span class="line">                        <span class="keyword">if</span> ((! <span class="variable">$strPipeFlag</span>) &amp;&amp; <span class="variable">$arrInput</span> [<span class="string">'houseId'</span>]) &#123;</span><br><span class="line">                            <span class="variable">$strPipeFlag</span> = <span class="number">1</span>;</span><br><span class="line">                            <span class="variable">$strHouseId</span> = <span class="variable">$arrInput</span> [<span class="string">'houseId'</span>];</span><br><span class="line">                            <span class="comment">// 产生第三子进程</span></span><br><span class="line">                            <span class="variable">$thirdChild</span>=pcntl_fork();</span><br><span class="line">                            <span class="comment">/*</span><br><span class="line">                             * 第三子进程 功能：获取从管道中得到的数据并将其发送给相应的客户端</span><br><span class="line">                             */</span></span><br><span class="line">                            <span class="keyword">if</span>(<span class="variable">$thirdChild</span>==<span class="number">0</span>)&#123;</span><br><span class="line">                                <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">                                    <span class="keyword">if</span>(<span class="variable">$strPipeData</span>=readPipe(<span class="variable">$strHouseId</span>))&#123;</span><br><span class="line">                                        <span class="keyword">if</span>(socket_write(<span class="variable">$childSocket</span>,<span class="variable">$strPipeData</span>,strlen(<span class="variable">$strPipeData</span>)))&#123;</span><br><span class="line">                                            <span class="comment">// 成功发送后删除Pipe</span></span><br><span class="line">                                            removePipe(<span class="variable">$strHouseId</span>);</span><br><span class="line">                                        &#125;</span><br><span class="line">                                    &#125;</span><br><span class="line">                                    sleep(<span class="number">0.1</span>);</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    sleep(<span class="number">0.1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        sleep(<span class="number">0.1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="preprocessor">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/01/25/windows-pthread/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          PHP中多线程的使用（一）——pthreads的安装与调试
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/10/14/php-dynamic-module/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">开发PHP动态可装载模块</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="bs-php-ipc-socket" data-title="利用多种IPC技术以及多进程技术实现WEB 远程控制底层硬件" data-url="http://sgq.me/2014/12/05/bs-php-ipc-socket/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"sgq"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Ethan
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
